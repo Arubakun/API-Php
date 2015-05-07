@@ -13,7 +13,8 @@
         
         session_start();
         session_unset();
-        UserDAO::getgetUserByLoginId($row["idLogin"]);
+        $user = UserDAO::getUserByLoginId($row["idLogin"]);
+        echo $user;
         
         echo "CONNECTED";
         return 1;

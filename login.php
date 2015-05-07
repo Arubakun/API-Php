@@ -1,6 +1,17 @@
 <?php
-    function loadUser() {
-    
+    function loadUser($pdo, $id) {
+        require_once("DTO/user.php");
+        
+        $params = array(":login" => $id);
+        $result = $pdo->prepare("SELECT * FROM user WHERE login = :login;");
+        
+        if($result && $result->execute($params)) {
+            $row = $result->fetch(PDO::FETCH_ASSOC);
+            $user = new User((int)$row["idUser"], $row["name"], $row["firstname"], $row["email"], $row["phone"], (int)$row["homePlace"], (int)$row["friends"], (int)$row["hasLiked"], (int)$row["login"]);
+
+            echo $user;
+            $_SESSION["userInfo"] = serialize($user);
+        }
     }
 
     // If one of the field is empty 
@@ -15,10 +26,10 @@
         
         session_start();
         session_unset();
-        $_SESSION["idLogin"] = $row["idLogin"];
+        $_SESSION["userInfo"] = loadUser($pdo, $row["idLogin"]);
         
         
         echo "CONNECTED";
-        return $row["idLogin"];
+        return 1;
     }
 ?>

@@ -31,6 +31,17 @@
         public function setFriends($friends) { $this->friends = $friends; }
         public function setHasLiked($hasLiked) { $this->hasLiked = $hasLiked; }
         public function setLogin($login) { $this->login = $login; }
+        
+        public function getIdUser() { return $this->idUser; }
+        public function getName() { return $this->name; }
+        public function getFirstname() { return $this->firstname; }
+        public function getEmail() { return $this->email; }
+        public function getPhone() { return $this->phone==""?null:$this->getPhone;  }
+        public function getHomePlace() { return $this->phone==""?null:$this->getPhone; }
+        public function getFriends() { return $this->friends==""?null:$this->friends; }
+        public function getHasLiked() { return $this->hasLiked==""?null:$this->hasLiked; }
+        public function getLogin() { return $this->login; }
+        
         public function __toString() { return $this->name; }
     }
 ?>

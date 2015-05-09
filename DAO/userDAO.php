@@ -11,7 +11,7 @@
         public static function getUserByLoginID($logId) {
             $dao = new self();
             $params = array(":logId" => $logId);
-            $result = $dao->pdo->prepare("SELECT * FROM user;");
+            $result = $dao->pdo->prepare("SELECT * FROM user WHERE login = :logId;");
             
             if($result && $result->execute($params)) {
                 $row = $result->fetch(PDO::FETCH_ASSOC);
@@ -26,6 +26,7 @@
             $params = array(":name" => $user->getName(), ":firstname" => $user->getFirstname(), ":email" => $user->getEmail(), ":phone" => $user->getPhone(), ":login" => $user->getLogin());
             $result = $dao->pdo->prepare("INSERT INTO `api-php`.`user` (`idUser`, `name`, `firstname`, `email`, `phone`, `homePlace`, `friends`, `hasLiked`, `login`) 
             VALUES (NULL, :name, :firstname, :email, :phone, NULL, NULL, NULL, :login);");
+            
             
             $result->execute($params);
         }

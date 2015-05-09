@@ -1,19 +1,15 @@
 <?php
     // If one of the field is empty 
-    if( !isset($_POST["login"]) || !isset($_POST["password"]) ) { return -1; }
-    require_once("..\DAO\LoginDAO.php");
+    if( !isset($_POST["nickname"]) || !isset($_POST["password"]) ) { return -1; }
 
-    $idLog = LoginDAO::getLoginByNickname($_POST["login"]);
-    echo "idLog : ".$idLog."<br/>";
+    require_once("connexion.php");
+    require_once("..\DAO\loginDAO.php");
+ 
+    $idLog = LoginDAO::getIdLoginByNickname($_POST["nickname"]);
 
     if(null == $idLog) {return 0;}
         
-    require_once("../DAO/UserDAO.php");
-        
-    session_start();
-    session_unset();
-    $user = UserDAO::getUserByLoginId($idLog);
-    echo $user;
+    connect($idLog);
         
     echo "<br/>CONNECTED";
     return 1;

@@ -8,6 +8,5 @@
         session_unset();
         
         $_SESSION["idUser"] = $user->getIdUser();
-         echo $user;
     }
 ?>

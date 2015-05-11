@@ -36,8 +36,8 @@
         public function getName() { return $this->name; }
         public function getFirstname() { return $this->firstname; }
         public function getEmail() { return $this->email; }
-        public function getPhone() { return $this->phone==""?null:$this->getPhone;  }
-        public function getHomePlace() { return $this->phone==""?null:$this->getPhone; }
+        public function getPhone() { return $this->phone==""?null:$this->phone;  }
+        public function getHomePlace() { return $this->phone==""?null:$this->homePlace; }
         public function getFriends() { return $this->friends==""?null:$this->friends; }
         public function getHasLiked() { return $this->hasLiked==""?null:$this->hasLiked; }
         public function getLogin() { return $this->login; }

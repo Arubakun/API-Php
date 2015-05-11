@@ -25,19 +25,27 @@
             $dao = new self();
             $params = array(":name" => $user->getName(), ":firstname" => $user->getFirstname(), ":email" => $user->getEmail(), ":phone" => $user->getPhone(), ":login" => $user->getLogin());
             $result = $dao->pdo->prepare("INSERT INTO `api-php`.`user` (`idUser`, `name`, `firstname`, `email`, `phone`, `homePlace`, `friends`, `hasLiked`, `login`) 
-            VALUES (NULL, :name, :firstname, :email, :phone, NULL, NULL, NULL, :login);");
-            
+            VALUES (NULL, :name, :firstname, :email, :phone, NULL, NULL, NULL, :login);");        
             
             $result->execute($params);
         }
         
-        public static function updateUser($user) {
+        public static function updateUser($user, $modif) {
             $dao = new self();
-            $params = array(":idUser" => $user->getIdUser(), ":name" => $user->getName(), ":firstname" => $user->getFirstname(), ":email" => $user->getEmail(), ":phone" => $user->getPhone(), ":login" => $user->getLogin());
-            $result = $dao->pdo->prepare("UPDATE 'api-php'.'user' SET `name` = :name, `firstname` = :firstname, `email` = :email, `phone` = :phone, `homePlace` = :homePlace, `friends` = :friends, `hasLiked` = :hasLiked 
-            WHERE idUser = :idUser;");
             
-            $result->execute($params);
+            $request = "UPDATE user SET";
+            
+            $size = count($modif) - 1;
+            foreach($modif as $k => $v) {
+                $request = $request." ".$k." = '".$v."'";
+                if($size--) { $request = $request.","; }
+            }
+            
+            $request = $request." WHERE idUser = ".$user->getIdUser().";"; 
+            
+            echo $request;
+            $result= $dao->pdo->prepare($request);
+            $result->execute();
         }
         
         public function getPDO() {return $this->pdo;}

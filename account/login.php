@@ -1,16 +1,28 @@
 <?php
-    // If one of the field is empty 
-    if( !isset($_POST["nickname"]) || !isset($_POST["password"]) ) { return -1; }
+    $out = array();
+
+    if( !isset($_POST["nickname"]) || !isset($_POST["password"]) ) { 
+        $out["token"] = null;
+        $out["code"] = -1;
+        echo json_encode($out); 
+        return;
+    }
 
     require_once("connexion.php");
     require_once("..\DAO\loginDAO.php");
  
-    $idLog = LoginDAO::getIdLoginByNickname($_POST["nickname"]);
+    $id = LoginDAO::getIdLoginByNickname($_POST["nickname"]);
 
-    if(null == $idLog) {return 0;}
+    if(null == $id) {
+        $out["token"] = null;
+        $out["code"] = 0;
+        echo json_encode($out); 
+        return;
+    }
         
-    connect($idLog);
+    connect($id);
+    $out["code"] = 1;
+    $out["token"] = $id;
         
-    echo "<br/>CONNECTED";
-    return 1;
+    echo json_encode($out);
 ?>

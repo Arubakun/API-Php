@@ -10,7 +10,7 @@
     }
     $phone = isset($_GET["phone"])?$_PUT["phone"]:"";
 
-    require_once("connexion.php");
+    require_once("..\session.php");
     require_once("..\DAO\UserDAO.php");
     require_once("..\DAO\LoginDAO.php");
 

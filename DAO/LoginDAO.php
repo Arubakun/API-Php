@@ -1,18 +1,13 @@
 <?php
     require_once("..\DTO\UserDTO.php");
+    require_once("BaseDAO.php");
 
-    class LoginDAO {
-        private $pdo; 
-        private $dao;
-        private function __construct() {
-            $this->pdo = new PDO("mysql:host=localhost;dbname=API-Php", "root", "toor");
-        }
+    class LoginDAO extends BaseDAO{
         
         public static function existLoginById($id) {
             $dao = new self();
             $params = array(":id" => $id);
             $result = $dao->pdo->prepare("SELECT idLogin FROM login WHERE idLogin = :id;");
-            $result->execute($params);
             
             if($result && $result->execute($params)) {
                 $row = $result->fetch(PDO::FETCH_ASSOC);

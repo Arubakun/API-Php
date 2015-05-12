@@ -1,13 +1,9 @@
 <?php
     require_once("..\DTO\UserDTO.php");
+    require_once("BaseDAO.php");
 
-    class UserDAO {
-        private $pdo; 
-        private $dao;
-        private function __construct() {
-            $this->pdo = new PDO("mysql:host=localhost;dbname=API-Php", "root", "toor");
-        }
-        
+    class UserDAO extends BaseDAO{
+    
         public static function getUserByLoginID($logId) {
             $dao = new self();
             $params = array(":logId" => $logId);

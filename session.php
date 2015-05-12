@@ -11,11 +11,14 @@
     }
 
     function isConnected() {
+        
         session_start();
         
-        if( !isset($_SESSION["token"]) )    {return 0;}
-        if( LoginDAO::existLoginById($_SESSION["token"]) || UserDAO::getUserByLoginID($_SESSION["token"]) == "" )   {return -1;}
+        echo "token => ".$_SESSION["token"];
+        if( !isset($_SESSION["token"]) )    {return null;}
         
-        return 1;
+        if( LoginDAO::existLoginById($_SESSION["token"]) == "" || ($user = UserDAO::getUserByLoginID($_SESSION["token"])) == "" )   {return null;}
+        
+        return $user;
     }
 ?>

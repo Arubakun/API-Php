@@ -23,14 +23,19 @@
     }
 
     require_once("..\DAO\FriendsDAO.php");
-    if( $ask = FriendsDAO::alreadyHasFriend($user, $friend) ) {
-        FriendsDAO::updateHasFriendStatus($ask, "OK");
-        
+    if( FriendsDAO::alreadyHasFriend($user, $friend) ) {
         $out["code"] = 3;
         echo json_encode($out); 
         return;
     }
-    echo "ask => ".$ask;
+
+    if( $ask = FriendsDAO::alreadyHasFriend($friend, $user) ) {
+        
+        FriendsDAO::updateHasFriendStatus($ask, "OK");
+        $out["code"] = 4;
+        echo json_encode($out); 
+        return;
+    }
 
     FriendsDAO::askFriend($user, $friend);        
     $out["code"] = 1;

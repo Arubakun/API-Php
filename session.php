@@ -14,7 +14,6 @@
         
         session_start();
         
-        echo "token => ".$_SESSION["token"];
         if( !isset($_SESSION["token"]) )    {return null;}
         
         if( LoginDAO::existLoginById($_SESSION["token"]) == "" || ($user = UserDAO::getUserByLoginID($_SESSION["token"])) == "" )   {return null;}

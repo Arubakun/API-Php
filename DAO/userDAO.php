@@ -16,6 +16,43 @@
                 return $user;
             }
         }
+        
+        public static function getUserByUserID($id) {
+            $dao = new self();
+            $params = array(":id" => $id);
+            $result = $dao->pdo->prepare("SELECT * FROM user WHERE idUser = :id;");
+            
+            if($result && $result->execute($params)) {
+                $row = $result->fetch(PDO::FETCH_ASSOC);
+                
+                $user = new User($row["idUser"], $row["name"], $row["firstname"], $row["email"], $row["phone"], $row["homePlace"], $row["friends"], $row["hasLiked"], $row["login"]);
+                return $user;
+            }
+            
+            return null;
+        }
+        
+        public static function getUserIdByLoginID($logId) {
+            $dao = new self();
+            $params = array(":logId" => $logId);
+            $result = $dao->pdo->prepare("SELECT idUser FROM user WHERE login = :logId;");
+            
+            if($result && $result->execute($params)) {
+                $row = $result->fetch(PDO::FETCH_ASSOC);                
+                return $row["idUser"];
+            }
+        }
+        
+        public static function getUsersByFilter($id) {
+            $dao = new self();
+            $params = array(":id" => $id);
+            $result = $dao->pdo->prepare("SELECT * FROM user WHERE idUser <> :id;");
+            
+            if($result && $result->execute($params)) {
+                $row = $result->fetch(PDO::FETCH_ASSOC);                
+                return $row["idUser"];
+            }
+        }
 
         public static function createNewUser($user) {
             $dao = new self();

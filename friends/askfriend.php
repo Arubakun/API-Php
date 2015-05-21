@@ -1,44 +1,62 @@
 <?php
+    require_once("..\json.php");
     require_once("..\session.php");
     $out = array();
     
+    // idUser of friend missing
     if( !isset($_GET["friend"]) ) {  
-        $out["code"] = -1;
-        echo json_encode($out); 
+        echo json_code(-1);
         return;
     }
 
+    // User not connected
     if( ($user = isConnected()) == null ) { 
-        echo "friend => ".$user;
-        $out["code"] = 0;
-        echo json_encode($out); 
+        echo json_code(0); 
+        return;
+    }
+
+    // Same id as the logged user
+    if( $_GET["friend"] == $_SESSION["token"] ) {  
+        echo json_code(-2);
         return;
     }
     
     require_once("..\DAO\UserDAO.php");
-    if( ($friend = UserDAO::getUserByLoginID($_GET["friend"])) == null) {
-        $out["code"] = 2;
-        echo json_encode($out); 
+    // Friend doesn't exist
+    if( ($friend = UserDAO::getUserByUserID($_GET["friend"])) == null) {
+        echo json_code(2); 
         return;
     }
-
+    
     require_once("..\DAO\FriendsDAO.php");
-    if( FriendsDAO::alreadyHasFriend($user, $friend) ) {
-        $out["code"] = 3;
-        echo json_encode($out); 
-        return;
-    }
-
-    if( $ask = FriendsDAO::alreadyHasFriend($friend, $user) ) {
+    // There is already a hasFriend with this friend
+    if( $ask = FriendsDAO::alreadyHasFriend($user, $friend) ) {
         
-        FriendsDAO::updateHasFriendStatus($ask, "OK");
-        $out["code"] = 4;
-        echo json_encode($out); 
-        return;
-    }
-
-    FriendsDAO::askFriend($user, $friend);        
-    $out["code"] = 1;
+        // Status ASK
+        if($ask["status"] == "ASK") {
+            if($ask["friend2"] == $user->getIdUser()) {
+                FriendsDAO::updateHasFriend($ask, "OK");
+                echo json_code(5); 
+                return;
+            }
+            
+            echo json_code(3); 
+            return;
+        }
         
-    echo json_encode($out);
+        // Status OK
+        if($ask["status"] == "OK") {
+            echo json_code(4); 
+            return;
+        }
+        
+        if($ask["status"] == "NO") {
+            FriendsDAO::updateHasFriend($ask["idHasFriend"], "ASK", $user->getIdUser(), $friend->getIdUser());
+            echo json_code(1);
+            return;
+        }
+    }
+    
+    FriendsDAO::askFriend($user, $friend);                
+    echo json_code(1);
 ?>

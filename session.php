@@ -6,7 +6,11 @@
         session_start();
         session_unset();
         
+        
+        if( LoginDAO::existLoginById($idLogin) == "" || ($id = UserDAO::getUserIdByLoginID($idLogin)) == "" )   {return false;}
         $_SESSION["token"] = $idLogin;
+        $_SESSION["id"] = $id;
+        
         return true;
     }
 

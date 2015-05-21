@@ -1,28 +1,28 @@
 <?php
+    require_once("../json.php");
     $out = array();
 
     if( !isset($_POST["nickname"]) || !isset($_POST["password"]) ) { 
-        $out["token"] = null;
-        $out["code"] = -1;
-        echo json_encode($out); 
+        echo json_code(-1, array("token", null)); 
         return;
     }
 
     require_once("..\session.php");
     require_once("..\DAO\loginDAO.php");
  
-    $id = LoginDAO::getIdLoginByNickname($_POST["nickname"]);
+    $login = LoginDAO::getLoginByNickname($_POST["nickname"]);
 
-    if(null == $id) {
-        $out["token"] = null;
-        $out["code"] = 0;
-        echo json_encode($out); 
+    if(null == $login) {
+        echo json_code(0, array("token", null));
         return;
     }
+    
+    if($_POST["password"] != $login["password"]) {
         
-    connect($id);
-    $out["code"] = 1;
-    $out["token"] = $id;
+        echo json_code(2, array("token", null));
+        return;   
+    }    
         
-    echo json_encode($out);
+    connect($login["idLogin"]);    
+    echo json_code(1, array("token", $login["idLogin"]));
 ?>

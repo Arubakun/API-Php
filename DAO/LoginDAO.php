@@ -16,15 +16,15 @@
             }
         }
         
-        public static function getIdLoginByNickname($nickname) {
+        public static function getLoginByNickname($nickname) {
             $dao = new self();
             $params = array(":nickname" => $nickname);
-            $result = $dao->pdo->prepare("SELECT idLogin FROM login WHERE nickname = :nickname;");
+            $result = $dao->pdo->prepare("SELECT idLogin, password FROM login WHERE nickname = :nickname;");
             
             if($result && $result->execute($params)) {
                 $row = $result->fetch(PDO::FETCH_ASSOC);
                 
-                return $row["idLogin"];
+                return $row;
             }
         }
             

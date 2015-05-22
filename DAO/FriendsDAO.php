@@ -77,7 +77,9 @@
             $dao = new self();
             $params = array(":idUser" => $id);
             
-            $request = "SELECT idHasFriend, friend1, friend2 FROM hasFriend WHERE (friend2 = :idUser OR friend1 = :idUser) AND status = 'OK'";  
+            $request = "SELECT DISTINCT u.idUser FROM user u 
+                        INNER JOIN hasFriend hf ON ((hf.friend1 = :idUser OR hf.friend2 =:idUser) AND (hf.friend1 = u.idUser OR hf.friend2 = u.idUser))
+                        WHERE u.idUser <> :idUser AND hf.status = 'OK'";  
             if($limit > 0) { 
                 $params[":limit"] = $limit;
                 $request = $request." LIMIT :limit;"; 
@@ -87,7 +89,7 @@
             $asks = array();
             if($result && $result->execute($params)) {                
                 while($row = $result->fetch(PDO::FETCH_ASSOC)) {
-                    $asks[$row["idHasFriend"]] = $row;
+                    $asks[] = $row["idUser"];
                 }
             }
             

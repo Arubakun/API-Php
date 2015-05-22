@@ -14,7 +14,7 @@
     require_once("..\DAO\LoginDAO.php");
 
     if(LoginDAO::getLoginByNickname($_GET["nickname"]) != "") {
-        echo json_code(-1, array("token", null));
+        echo json_code(2, array("token", null));
         return;
     }    
 
@@ -24,6 +24,6 @@
     $user = new User(null , $_GET["name"], $_GET["firstname"], $_GET["email"], $phone, null, null, null, $login["idLogin"]);
     UserDAO::createNewUser($user);
     
-    connect($id);
+    connect($login["idLogin"]);
     echo json_code(1, array("token", $login["idLogin"]));
 ?>

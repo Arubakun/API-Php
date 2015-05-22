@@ -15,19 +15,17 @@
         return;
     }
     
+    $filters = array();
+    if($_POST["name"])  $filters["name"] = $_POST["name"];
+    if($_POST["firstname"])  $filters["firstname"] = $_POST["firstname"];
+    if($_POST["nickname"])  $filters["nickname"] = $_POST["nickname"];
+
     require_once("..\DAO\FriendsDAO.php");
-    // User doesn't have any friend
-    if( ($hasFriends = FriendsDAO::getFriendsForUserByIdUser($_SESSION["token"])) == "") {
+    // No results for the research
+    if( ($results = UserDAO::getUsersByFilter($_SESSION["token"]), $filters) == "" ) {
         echo json_code(2); 
         return;
     }
 
-    $user = UserDAO::getUserIdByLoginID($_SESSION["token"]);
-    $friends = array();
-    foreach($hasFriends as $k => $v) {
-        $id = $v["friend1"]==$user?$v["friend2"]:$v["friend1"];
-        $friends[] = $id;
-    }
-
-    echo json_code(1, array("friends", $friends) );
+    echo json_code(1, array("friends", $results) );
 ?>

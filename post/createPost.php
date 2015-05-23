@@ -15,11 +15,16 @@
         return;
     }
     
+    $tags = array();
+    if(isset($_POST["tags"])) {
+        $tags = explode(",", $_POST["tags"]);
+    }
+
     require_once("..\DAO\PubliDAO.php");
     require_once("..\DAO\PostDAO.php");
     
     $publi = PubliDAO::createNewPubli($user);
-    $asks = PostDAO::createNewPost($_POST["title"], $_POST["content"], $publi);
+    $asks = PostDAO::createNewPost($_POST["title"], $_POST["content"], $publi, $tags);
    
     echo json_code(1);
 ?>

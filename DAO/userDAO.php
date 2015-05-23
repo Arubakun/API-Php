@@ -64,24 +64,32 @@
             }
             
             $request = $request." WHERE idUser = ".$user->getIdUser().";"; 
-            
-            echo $request;
+
             $result= $dao->pdo->prepare($request);
             $result->execute();
         }
         
-        public static function getUsersByFilter($id, $filters = null) {
+        public static function getUsersByFilter($id, $filters = null, $offset = 0, $limit = 0) {
             $dao = new self();
-            $params = array(":id" => $id);
-            $request = ;
+            $request = "SELECT u.`idUser`, hf.idHasFriend is not null as isFriend FROM `user` u LEFT JOIN hasFriend hf ON (hf.friend1 = :idUser AND hf.friend2 = u.idUser OR hf.friend2 = :idUser AND hf.friend1 = u.idUser) WHERE u.`idUser` <> :idUser";
             
-            $result = $dao->pdo->prepare("SELECT * FROM user WHERE idUser <> :id;");
+            if( count($filters) ) {
+                foreach($filters as $k => $v) {
+                    $request = $request." AND ".$k." LIKE '%".$v."%'";
+                }
+            }
+            
+            $request = $request." LIMIT :limit OFFSET :offset ;";
+            
+            $result = $dao->pdo->prepare($request);
+            $result->bindValue(':idUser', $id, PDO::PARAM_STR); 
+            $result->bindValue(':offset', (int) $offset, PDO::PARAM_INT); 
+            $result->bindValue(':limit', (int) $limit, PDO::PARAM_INT);             
             
             $users = array();
-            if($result && $result->execute($params)) {
-                
-                while($row = $result->fetch(PDO::FETCH_ASSOC)) {                
-                    $users[] = $row["idUser"];
+            if($result && $result->execute()) {
+                while($row = $result->fetch(PDO::FETCH_ASSOC)) { 
+                    $users[$row["idUser"]] = $row["isFriend"];
                 }
             }
             

@@ -75,19 +75,19 @@
         
         public static function getFriendsForUserByIdUser($id, $offset = 0, $limit = 0) {
             $dao = new self();
-            $params = array(":idUser" => $id);
+            //$params = array(":idUser" => $id, ":offset" => $offset, ":limit" => $limit);
             
             $request = "SELECT DISTINCT u.idUser FROM user u 
                         INNER JOIN hasFriend hf ON ((hf.friend1 = :idUser OR hf.friend2 =:idUser) AND (hf.friend1 = u.idUser OR hf.friend2 = u.idUser))
-                        WHERE u.idUser <> :idUser AND hf.status = 'OK'";  
-            if($limit > 0) { 
-                $params[":limit"] = $limit;
-                $request = $request." LIMIT :limit;"; 
-            }
+                        WHERE u.idUser <> :idUser AND hf.status = 'OK' LIMIT :limit OFFSET :offset;";  
+            
             $result = $dao->pdo->prepare($request);
+            $result->bindValue(':idUser', $id, PDO::PARAM_STR); 
+            $result->bindValue(':offset', (int) $offset, PDO::PARAM_INT); 
+            $result->bindValue(':limit', (int) $limit, PDO::PARAM_INT); 
             
             $asks = array();
-            if($result && $result->execute($params)) {                
+            if($result && $result->execute()) {                
                 while($row = $result->fetch(PDO::FETCH_ASSOC)) {
                     $asks[] = $row["idUser"];
                 }

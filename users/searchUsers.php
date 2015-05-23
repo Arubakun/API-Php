@@ -3,8 +3,8 @@
     require_once("..\session.php");
     $out = array();
     
-    // idHasFriend missing
-    if( false ) {  
+    // Params missing
+    if( !isset($_POST["offset"]) && !isset($_POST["limit"]) ) {  
         echo json_code(-1);
         return;
     }
@@ -16,16 +16,16 @@
     }
     
     $filters = array();
-    if($_POST["name"])  $filters["name"] = $_POST["name"];
-    if($_POST["firstname"])  $filters["firstname"] = $_POST["firstname"];
-    if($_POST["nickname"])  $filters["nickname"] = $_POST["nickname"];
+    if( isset($_POST["name"]) )  $filters["name"] = $_POST["name"];
+    if( isset($_POST["firstname"]) ) $filters["firstname"] = $_POST["firstname"];
+    if( isset($_POST["nickname"]) )  $filters["nickname"] = $_POST["nickname"];
 
     require_once("..\DAO\FriendsDAO.php");
     // No results for the research
-    if( ($results = UserDAO::getUsersByFilter($_SESSION["token"]), $filters) == "" ) {
+    if( ($results = UserDAO::getUsersByFilter($_SESSION["token"], $filters, $_POST["offset"], $_POST["limit"])) == "" ) {
         echo json_code(2); 
         return;
     }
 
-    echo json_code(1, array("friends", $results) );
+    echo json_code(1, array("users", $results) );
 ?>

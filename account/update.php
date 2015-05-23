@@ -1,10 +1,18 @@
 <?php
+    require_once("../json.php");
+    require_once("../session.php");
     $out = array();
     
     // If one of the field is empty 
-    if( !isset($_POST["id"]) || (!isset($_POST["name"]) && !isset($_POST["firstname"]) && !isset($_POST["email"]) &&!isset($_POST["phone"])) ) { 
+    if( !isset($_POST["name"]) && !isset($_POST["firstname"]) && !isset($_POST["email"]) &&!isset($_POST["phone"]) ) { 
         echo json_code(-1);
         return; 
+    }
+
+    // User not connected
+    if( ($user = isConnected()) == null ) { 
+        echo json_code(0); 
+        return;
     }
 
     require_once("..\DAO\UserDAO.php");
@@ -16,7 +24,7 @@
     }   
 
     $modif = array();    
-    $user = UserDAO::getUserByLoginID($_POST["id"]);
+    $user = UserDAO::getUserByLoginID($_SESSION["token"]);
     
     if(isset($_POST["name"]) && $_POST["name"] != $user->getName())                 { $modif["name"] = $_POST["name"]; }
     if(isset($_POST["firstname"]) && $_POST["firstname"] != $user->getFirstname())  { $modif["firstname"] = $_POST["firstname"]; }

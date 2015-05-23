@@ -11,7 +11,7 @@
             
             if($result && $result->execute($params)) {
                 $row = $result->fetch(PDO::FETCH_ASSOC);
-                $user = new User($row["idUser"], $row["name"], $row["firstname"], $row["email"], $row["phone"], $row["homePlace"], $row["friends"], $row["hasLiked"], $row["login"]);
+                $user = new User($row["idUser"], $row["name"], $row["firstname"], $row["email"], $row["phone"], $row["homePlace"], $row["login"]);
                 
                 return $user;
             }
@@ -25,7 +25,7 @@
             if($result && $result->execute($params)) {
                 $row = $result->fetch(PDO::FETCH_ASSOC);
                 
-                $user = new User($row["idUser"], $row["name"], $row["firstname"], $row["email"], $row["phone"], $row["homePlace"], $row["friends"], $row["hasLiked"], $row["login"]);
+                $user = new User($row["idUser"], $row["name"], $row["firstname"], $row["email"], $row["phone"], $row["homePlace"], $row["login"]);
                 return $user;
             }
             
@@ -88,7 +88,7 @@
             
             $users = array();
             if($result && $result->execute()) {
-                while($row = $result->fetch(PDO::FETCH_ASSOC)) { 
+                while($row = $result->fetch(PDO::FETCH_ASSOC)) {    
                     $users[$row["idUser"]] = $row["isFriend"];
                 }
             }

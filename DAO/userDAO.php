@@ -47,6 +47,26 @@
             $result= $dao->pdo->prepare($request);
             $result->execute();
         }
+		
+		 public static function deleteUser($idLog){
+        	$dao = new self();
+        	$params = array(":login" => $idLog);
+        	$result = $dao->pdo->prepare("DELETE FROM `api-php`.`user`
+        			WHERE `login` = :login;");
+        	
+        	$result->execute($params);
+        	
+        }
+        
+        public static function deleteLogin($idLog){
+        	$dao = new self();
+        	$params = array(":login" => $idLog);
+        	$result = $dao->pdo->prepare("DELETE FROM `api-php`.`login`
+        			WHERE `idLogin` = :login;");
+        	 
+        	$result->execute($params);
+        	 
+        }
         
         public function getPDO() {return $this->pdo;}
     }

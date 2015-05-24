@@ -12,6 +12,8 @@
             $result->bindValue(':content', $content, PDO::PARAM_STR); 
             $result->bindValue(':publication', (int) $publication, PDO::PARAM_INT);      
             $result->execute();
+            
+            return $dao->pdo->lastInsertId();
         }
         
         public static function updatePost($idPost, $modifs) {
@@ -39,8 +41,10 @@
             $result->execute($params);
             $row = $result->fetch(PDO::FETCH_ASSOC);
             
-            return new Post($row["idPost"], $row["title"], $row["content"], $row["publication"]);
+            if($row)
+                return new Post($row["idPost"], $row["title"], $row["content"], $row["publication"]);
             
+            return null;            
         }
         
         public static function getPostsByIdUser($idUser) {
@@ -65,32 +69,30 @@
         public static function getTimelineByIdUser($idUser, $offset = 0, $limit = 30) {
             $dao = new self();
             
-            $params = array(":idUser" => $idUser);
-            $result= $dao->pdo->prepare("SELECT `post`.*, pub.`created` 
-            FROM `post` 
+            $result= $dao->pdo->prepare("SELECT post.*, pub.created 
+            FROM post 
 
-            INNER JOIN `publication` pub ON pub.idPublication = `post`.publication
+            INNER JOIN `publication` pub ON pub.idPublication = post.publication
 
             WHERE pub.author IN
             (
                 SELECT DISTINCT idUser 
                 FROM user u
                 INNER JOIN hasFriend hf ON 
-                (hf.friend1 = 1 OR hf.friend2 = 1) 
+                (hf.friend1 = :idUser OR hf.friend2 = :idUser) 
                 AND (u.idUser = hf.friend1 OR u.idUser = hf.friend2) 
 
                 WHERE hf.status = 'OK'
             )
 
-            ORDER BY pub.created");
+            ORDER BY pub.created
+            LIMIT :limit OFFSET :offset;");
             $result->bindValue(':idUser', (int) $idUser, PDO::PARAM_INT); 
             $result->bindValue(':offset', (int) $offset, PDO::PARAM_INT); 
-            $result->bindValue(':limit', (int) $limit, PDO::PARAM_INT);      
-            $result->execute();
-            
+            $result->bindValue(':limit', (int) $limit, PDO::PARAM_INT);              
             
             $posts = array();
-            if($result && $result->execute($params)) {                
+            if($result && $result->execute()) {                
                 while($row = $result->fetch(PDO::FETCH_ASSOC)) {
                     $posts[] = array($row["idPost"], $row["title"], $row["content"], $row["publication"], $row["created"]);
                 }

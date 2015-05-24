@@ -18,12 +18,14 @@
         return;
     }    
 
-    LoginDAO::createNewLogin($_GET["nickname"], $_GET["password"]);
-    $login = LoginDAO::getLoginByNickname($_GET["nickname"]);
+    if(($login = LoginDAO::createNewLogin($_GET["nickname"], $_GET["password"])) == "") {
+        echo json_code(-2, array("token", null));
+        return;
+    }        
     
-    $user = new User(null , $_GET["name"], $_GET["firstname"], $_GET["email"], $phone, null, null, null, $login["idLogin"]);
+    $user = new User(null , $_GET["name"], $_GET["firstname"], $_GET["email"], $phone, null, null, null, $login);
     UserDAO::createNewUser($user);
     
-    connect($login["idLogin"]);
-    echo json_code(1, array("token", $login["idLogin"]));
+    connect($login);
+    echo json_code(1, array("token", $login));
 ?>

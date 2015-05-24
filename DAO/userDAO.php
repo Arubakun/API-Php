@@ -50,6 +50,7 @@
             VALUES (NULL, :name, :firstname, :email, :phone, NULL, NULL, NULL, :login);");        
             
             $result->execute($params);
+            return $dao->pdo->lastInsertId();
         }
         
         public static function updateUser($user, $modif) {

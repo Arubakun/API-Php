@@ -7,7 +7,7 @@
         public static function createNewPost($title, $content, $publication, $tags) {
             $dao = new self();
             
-            $result = $dao->pdo->prepare("INSERT INTO `api-php`.`post` (`idPost` ,`title` ,`content`, `publication`) VALUES (NULL ,:title , :content, :publication);");
+            $result = $dao->pdo->prepare("INSERT INTO `api-php`.`post` (`title` ,`content`, `publication`) VALUES (:title , :content, :publication);");
             $result->bindValue(':title', $title, PDO::PARAM_STR); 
             $result->bindValue(':content', $content, PDO::PARAM_STR); 
             $result->bindValue(':publication', (int) $publication, PDO::PARAM_INT);      

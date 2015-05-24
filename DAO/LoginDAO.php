@@ -31,7 +31,7 @@
         public static function createNewLogin($nickname, $password) {
             $dao = new self();
             $params = array(":nickname" => $nickname, ":password" => $password);
-            $result = $dao->pdo->prepare("INSERT INTO `api-php`.`login` (`idLogin` ,`nickname` ,`password`) VALUES (NULL , :nickname, :password);");
+            $result = $dao->pdo->prepare("INSERT INTO `api-php`.`login` (`nickname` ,`password`) VALUES (:nickname, :password);");
             $result->execute($params);
             
             return $dao->pdo->lastInsertId();

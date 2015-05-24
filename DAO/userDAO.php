@@ -46,8 +46,8 @@
         public static function createNewUser($user) {
             $dao = new self();
             $params = array(":name" => $user->getName(), ":firstname" => $user->getFirstname(), ":email" => $user->getEmail(), ":phone" => $user->getPhone(), ":login" => $user->getLogin());
-            $result = $dao->pdo->prepare("INSERT INTO `api-php`.`user` (`name`, `firstname`, `email`, `phone`, `homePlace`, `friends`, `hasLiked`, `login`) 
-            VALUES (:name, :firstname, :email, :phone, NULL, NULL, NULL, :login);");        
+            $result = $dao->pdo->prepare("INSERT INTO `api-php`.`user` (`name`, `firstname`, `email`, `phone`, `homePlace`, `login`) 
+            VALUES (:name, :firstname, :email, :phone, NULL, :login);");        
             
             $result->execute($params);
             return $dao->pdo->lastInsertId();

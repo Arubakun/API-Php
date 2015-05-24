@@ -7,7 +7,7 @@
         public static function createNewComment($content, $publication, $post) {
             $dao = new self();
             
-            $result = $dao->pdo->prepare("INSERT INTO `api-php`.`comment` (`idComment` , `content`, `publication`, `post`) VALUES (NULL , :content, :publication, :post);");
+            $result = $dao->pdo->prepare("INSERT INTO `api-php`.`comment` (`content`, `publication`, `post`) VALUES (:content, :publication, :post);");
             $result->bindValue(':content', $content, PDO::PARAM_STR); 
             $result->bindValue(':publication', (int) $publication, PDO::PARAM_INT);      
             $result->bindValue(':post', (int) $post, PDO::PARAM_INT);      

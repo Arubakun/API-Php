@@ -3,7 +3,8 @@
     $out = array();
 
     // If one of the field is empty 
-    if( !isset($_GET["nickname"]) || !isset($_GET["password"]) || !isset($_GET["name"]) || !isset($_GET["firstname"]) || !isset($_GET["email"]) ) {
+    if( (!isset($_GET["nickname"]) || $_GET["nickname"] == "") || (!isset($_GET["password"]) || $_GET["password"]) || (!isset($_GET["name"]) || $_GET["name"] ) || 
+       (!isset($_GET["firstname"]) || $_GET["firstname"]) || (!isset($_GET["email"]) || $_GET["email"]) ) {
         echo json_code(-1, array("token", null));
         return; 
     }

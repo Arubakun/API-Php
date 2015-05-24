@@ -18,8 +18,8 @@
         public static function deleteLike($hasLiked) {
             $dao = new self();
             
-            $result = $dao->pdo->prepare("DELETE `api-php`.`hasLiked` WHERE idHasLiked = idHasLiked;");
-            $result->bindValue(':idHasLiked', (int) $idHasLiked, PDO::PARAM_INT);           
+            $result = $dao->pdo->prepare("DELETE FROM `api-php`.`hasLiked` WHERE idHasLiked = :hasLiked;");
+            $result->bindValue(':hasLiked', (int) $hasLiked, PDO::PARAM_INT);           
             $result->execute();
         }
         

@@ -20,7 +20,7 @@
         LikeDAO::createLike($user->getIdUser(), $_GET["publication"]);
     }
     else {
-        LikeDAO::deleteLike($hasLiked);
+        LikeDAO::deleteLike($hasLiked["idHasLiked"]);
     }
    
     echo json_code(1);

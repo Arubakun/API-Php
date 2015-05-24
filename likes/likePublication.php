@@ -16,15 +16,12 @@
     }
 
     require_once("..\DAO\LikeDAO.php");
-    if( (LikeDAO::getLikeByPublicationAndIdUser($publication, $user->getUser())) == "") {
-        LikeDAO::createLike($user->getUser(), $GET["publication"]);
+    if( ($hasLiked = LikeDAO::getLikeByPublicationAndIdUser($_GET["publication"], $user->getIdUser())) == "") {
+        LikeDAO::createLike($user->getIdUser(), $_GET["publication"]);
     }
     else {
-        LikeDAO::deleteLike()
+        LikeDAO::deleteLike($hasLiked);
     }
-    
-    $publi = PubliDAO::createNewPubli($user);
-    CommentDAO::createNewComment($_POST["content"], $publi, $_POST["post"]);
    
     echo json_code(1);
 ?>

@@ -30,18 +30,26 @@
             $result->bindValue(':publication', (int) $idLike, PDO::PARAM_INT);          
             $result->execute();
             
-            return $row;
+            if($result && $result->execute()) {
+                $row = $result->fetch(PDO::FETCH_ASSOC);
+                
+                return $row;
+            }
         }
         
         public static function getLikeByPublicationAndIdUser($publication, $idUser) {
             $dao = new self();
             
             $result = $dao->pdo->prepare("SELECT * FROM `hasLiked` WHERE `publication` = :publication AND `user` = :user;");
-            $result->bindValue(':publication', (int) $idLike, PDO::PARAM_INT);    
+            $result->bindValue(':publication', (int) $publication, PDO::PARAM_INT);    
             $result->bindValue(':user', (int) $idUser, PDO::PARAM_INT);   
             $result->execute();
             
-            return $row;
+            if($result && $result->execute()) {
+                $row = $result->fetch(PDO::FETCH_ASSOC);
+                
+                return $row;
+            }
         }
         
         public function getPDO() {return $this->pdo;}

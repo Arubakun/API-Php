@@ -3,8 +3,8 @@
     require_once("..\session.php");
     $out = array();
     
-    // idHasFriend missing
-    if( !isset($_GET["offset"]) || !isset($_GET["limit"])) {  
+    // Params missing
+    if( !isset($_GET["offset"]) || !isset($_GET["limit"]) ) {  
         echo json_code(-1);
         return;
     }
@@ -17,10 +17,15 @@
     
     require_once("..\DAO\FriendsDAO.php");
     // User doesn't have any friend
-    if( ($friends = FriendsDAO::getFriendsForUserByIdUser($_SESSION["token"], $_GET["offset"], $_GET["limit"])) == "") {
+    if( ( $friends = FriendsDAO::getFriendsForUserByIdUser($_SESSION["token"])) == "") {
         echo json_code(2); 
         return;
     }
 
-    echo json_code( 1, array("friends", $friends) );
+    require_once("..\DAO\PubliDAO.php");
+    require_once("..\DAO\PostDAO.php");
+    
+    $posts = PostDAO::getTimelineByIdUser($user->getIdUser(), $_GET["offset"], $_GET["limit"]);
+
+    echo json_code(1, array("posts", $posts));
 ?>

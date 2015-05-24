@@ -73,13 +73,12 @@
             return "";
         }
         
-        public static function getFriendsForUserByIdUser($id, $offset = 0, $limit = 0) {
+        public static function getFriendsForUserByIdUser($id, $offset = 0, $limit = 30) {
             $dao = new self();
-            //$params = array(":idUser" => $id, ":offset" => $offset, ":limit" => $limit);
             
             $request = "SELECT DISTINCT u.idUser FROM user u 
-                        INNER JOIN hasFriend hf ON ((hf.friend1 = :idUser OR hf.friend2 =:idUser) AND (hf.friend1 = u.idUser OR hf.friend2 = u.idUser))
-                        WHERE u.idUser <> :idUser AND hf.status = 'OK' LIMIT :limit OFFSET :offset;";  
+                        INNER JOIN hasFriend hf ON ((hf.friend1 = :idUser AND hf.friend2 = u.idUser) OR (hf.friend1 = u.idUser AND hf.friend2 = :idUser))
+                        WHERE hf.status = 'OK' LIMIT :limit OFFSET :offset;";  
             
             $result = $dao->pdo->prepare($request);
             $result->bindValue(':idUser', $id, PDO::PARAM_STR); 

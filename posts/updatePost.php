@@ -4,7 +4,7 @@
     $out = array();
     
     // Params missing
-    if( !isset($_POST["idPost"]) && (!isset($_POST["title"]) || !isset($_POST["content"])) ) {  
+    if( !isset($_POST["idPost"]) && (!isset($_POST["title"]) || !isset($_POST["content"]) || !isset($_POST["tags"]) || !isset($_POST["hashtags"])) ) {  
         echo json_code(-1);
         return;
     }
@@ -22,6 +22,16 @@
         echo json_code(2); 
         return;
     }
+
+    $tags = array();
+    if(isset($_POST["tags"])) {
+        $tags = explode(",", $_POST["tags"]);
+    }
+
+    $hashtags = array();
+    if(isset($_POST["hashtags"])) {
+        $hashtags = explode(",", $_POST["hashtags"]);
+    }
        
     $modifs = array();
     if( isset($_POST["title"]) && $post->getTitle() != $_POST["title"] )  $modifs["title"] = $_POST["title"];
@@ -34,5 +44,8 @@
 
     PostDAO::updatePost($_POST["idPost"], $modifs);
     PubliDAO::updatePublication($post->getPublication());
+
+    TagDAO::createTagsWithIdLIst($tags, $publi);
+    TagDAO::createHashtagsWithIdLIst($hashtags, $publi);
     echo json_code(1);
 ?>

@@ -20,11 +20,20 @@
         $tags = explode(",", $_POST["tags"]);
     }
 
+    $hashtags = array();
+    if(isset($_POST["hashtags"])) {
+        $hashtags = explode(",", $_POST["hashtags"]);
+    }
+
     require_once("..\DAO\PubliDAO.php");
     require_once("..\DAO\PostDAO.php");
+    require_once("..\DAO\TagDAO.php");
     
     $publi = PubliDAO::createNewPubli($user);
-    $asks = PostDAO::createNewPost($_POST["title"], $_POST["content"], $publi, $tags);
+    PostDAO::createNewPost($_POST["title"], $_POST["content"], $publi, $tags);
+    
+    TagDAO::createTagsWithIdLIst($tags, $publi);
+    TagDAO::createHashtagsWithIdLIst($hashtags, $publi);
    
     echo json_code(1);
 ?>

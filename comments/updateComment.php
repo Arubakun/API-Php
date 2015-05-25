@@ -22,6 +22,17 @@
         echo json_code(2); 
         return;
     }
+
+    $tags = array();
+    if(isset($_POST["tags"])) {
+        $tags = explode(",", $_POST["tags"]);
+    }
+
+    $hashtags = array();
+    if(isset($_POST["hashtags"])) {
+        $hashtags = explode(",", $_POST["hashtags"]);
+    }
+
        
     $modifs = array();
     if( isset($_POST["tags"]) && $comment->getTitle() != $_POST["tags"] )  $modifs["tags"] = $_POST["tags"];
@@ -34,5 +45,8 @@
 
     CommentDAO::updateComment($_POST["comment"], $modifs);
     PubliDAO::updatePublication($comment->getPublication());
+
+    TagDAO::createTagsWithIdLIst($tags, $publi);
+    TagDAO::createHashtagsWithIdLIst($hashtags, $publi);
     echo json_code(1);
 ?>

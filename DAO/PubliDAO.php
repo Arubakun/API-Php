@@ -83,6 +83,46 @@
             return null;
         }
         
+        public static function getFriendPublicationsForHashtag($idUser, $hashtag, $offset = 0, $limit = 30) {
+            $dao = new self();
+            $request = "SELECT pub.* FROM publication pub 
+
+            INNER JOIN tag ON tag.publication = pub.idPublication
+
+            WHERE pub.author IN
+            (
+                SELECT DISTINCT u.idUser
+                FROM user u
+                INNER JOIN hasFriend hf ON 
+                (hf.friend1 = :idUser OR hf.friend2 = :idUser) 
+                AND (u.idUser = hf.friend1 OR u.idUser = hf.friend2) 
+
+                WHERE hf.status = 'OK'
+            )
+            AND tag.value = :hashtag
+            
+            LIMIT :limit 
+            OFFSET :offset;";
+            
+            $result = $dao->pdo->prepare($request);
+            $result->bindValue(':idUser', $idUser, PDO::PARAM_STR); 
+            $result->bindValue(':hashtag', $hashtag, PDO::PARAM_STR); 
+            $result->bindValue(':offset', (int)$offset, PDO::PARAM_INT); 
+            $result->bindValue(':limit', (int)$limit, PDO::PARAM_INT);        
+                
+            $publications = array();
+            if($result && $result->execute()) { 
+                while($row = $result->fetch(PDO::FETCH_ASSOC)) {
+                    $publications[] = $row;
+                }
+            }
+            
+            if(count($publications))
+                return $publications;
+            
+            return null;    
+        }
+        
         public function getPDO() {return $this->pdo;}
     }
 ?>

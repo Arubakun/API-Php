@@ -43,7 +43,6 @@
         
         public static function createTagsWithIdLIst($ids, $publication, $type = "USER") {
             foreach($ids as $id) {
-                echo $id;
                 if(TagDAO::getTagByIdUserAndPublication($id, $publication) == "" ) {
                     TagDAO::createNewTag($id, $publication, $type); 
                 }
@@ -52,7 +51,6 @@
         
         public static function createHashtagsWithIdLIst($values, $publication, $type = "HASHTAG") {
             foreach($values as $value) {
-                echo $value;
                 if(TagDAO::getHashtagByValueAndPublication($value, $publication) == "") {
                     TagDAO::createNewHashtag($value, $publication, $type);  
                 } 

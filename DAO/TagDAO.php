@@ -41,10 +41,36 @@
             }
         }
         
+        public static function getTagsForPublication($idPubli, $type = "USER") {
+            $dao = new self();
+            $request = "SELECT tag.user FROM tag 
+
+            INNER JOIN publication pub ON tag.publication = pub.idPublication
+            
+            WHERE type = :type AND idPublication = :id;";
+            
+            $result = $dao->pdo->prepare($request);
+            $result->bindValue(':id', $idPubli, PDO::PARAM_STR); 
+            $result->bindValue(':type', $type, PDO::PARAM_STR);     
+                
+            $tags = array();
+            if($result && $result->execute()) { 
+                while($row = $result->fetch(PDO::FETCH_ASSOC)) {
+                    $tags[] = $row;
+                }
+            }
+            
+            if(count($tags))
+                return $tags;
+            
+            return null;    
+        }
+        
+        
         public static function createTagsWithIdLIst($ids, $publication, $type = "USER") {
             foreach($ids as $id) {
                 if(TagDAO::getTagByIdUserAndPublication($id, $publication) == "" ) {
-                    TagDAO::createNewTag($id, $publication, $type); 
+                    self::createNewTag($id, $publication, $type); 
                 }
             }
         }
@@ -52,7 +78,7 @@
         public static function createHashtagsWithIdLIst($values, $publication, $type = "HASHTAG") {
             foreach($values as $value) {
                 if(TagDAO::getHashtagByValueAndPublication($value, $publication) == "") {
-                    TagDAO::createNewHashtag($value, $publication, $type);  
+                    self::createNewHashtag($value, $publication, $type);  
                 } 
             }
         }

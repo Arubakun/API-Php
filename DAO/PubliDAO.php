@@ -53,6 +53,24 @@
             return null;
         }
         
+        public static function getIdAuthorForPost($idPubli) {
+            $dao = new self();
+            
+            $request = "SELECT `author` FROM `publication` INNER JOIN `post` ON idPublication = publication WHERE `idPost` = :id;";
+
+            $result= $dao->pdo->prepare($request);
+            $result->bindValue(':id', (int)$idPubli, PDO::PARAM_INT);
+            
+            if($result && $result->execute()) {
+                while($row = $result->fetch(PDO::FETCH_ASSOC)) {
+                    return $row["author"]; 
+                }
+            }
+            
+            
+            return null;
+        }
+        
         public static function getUsersForPublications($offset = 0, $limit = 30) {
             $dao = new self();
             

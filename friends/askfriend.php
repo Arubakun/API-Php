@@ -29,6 +29,7 @@
     }
     
     require_once("..\DAO\FriendsDAO.php");
+    require_once("..\DAO\NotificationDAO.php");
     // There is already a hasFriend with this friend
     if( $ask = FriendsDAO::alreadyHasFriend($user, $friend) ) {
         
@@ -57,6 +58,7 @@
         }
     }
     
-    FriendsDAO::askFriend($user, $friend);                
+    FriendsDAO::askFriend($user, $friend);
+    NotificationDAO::createNewNotification($friend->getIdUser(), "ASK FRIEND ".$user->getIdUser());
     echo json_code(1);
 ?>

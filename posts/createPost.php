@@ -28,12 +28,14 @@
     require_once("..\DAO\PubliDAO.php");
     require_once("..\DAO\PostDAO.php");
     require_once("..\DAO\TagDAO.php");
+    require_once("..\DAO\NotificationDAO.php");
     
     $publi = PubliDAO::createNewPubli($user);
     PostDAO::createNewPost($_POST["title"], $_POST["content"], $publi, $tags);
     
     TagDAO::createTagsWithIdLIst($tags, $publi);
     TagDAO::createHashtagsWithIdLIst($hashtags, $publi);
+    if( count($tags) )    NotificationDAO::createNotificationsWithIdList($tags, "POST", $publi);
    
     echo json_code(1);
 ?>

@@ -1,18 +1,25 @@
 <?php
-// If one of the field is empty
-if(!isset($_GET["login"])) {echo "Echec"; return -1; }
-require_once("..\DAO\UserDAO.php");
-require_once("..\DAO\LoginDAO.php");
+//TO DO : linker le delete user avec toutes les autres tables qui sont liées avec le login
+	require_once("../json.php");
+	$out = array();
+	
+	if(!isset($_GET["nickname"])) {
+		echo json_code(-1, array("token", null)); 
+        return;
+	}
+	require_once("..\DAO\UserDAO.php");
+	require_once("..\DAO\LoginDAO.php");
 
-$idLog = LoginDAO::getIdLoginByNickname($_GET["login"]);
+	$login = LoginDAO::getIdLoginByNickname($_GET["nickname"]);
 
-UserDAO::deleteUser($idLog);
+	if(null == $login) {
+        echo json_code(0, array("token", null));
+        return;
+    }
+	
+	UserDAO::deleteUser($idLog);
+	UserDAO::deleteLogin($idLog);
+	
 
-echo "Delete User\n";
-
-UserDAO::deleteLogin($idLog);
-
-echo "Delete login\n";
-
-return 1;
+	echo json_code(1);
 ?>

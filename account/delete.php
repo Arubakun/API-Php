@@ -1,6 +1,7 @@
 <?php
-//TO DO : linker le delete user avec toutes les autres tables qui sont liées avec le login
+//TO DO : linker le delete user avec toutes les autres tables qui sont liï¿½es avec le login
 	require_once("../json.php");
+	require_once("../session.php");
 	$out = array();
 	
 	if(!isset($_GET["nickname"])) {
@@ -20,25 +21,45 @@
 	require_once("..\DAO\CommentDAO.php");
 	require_once("..\DAO\PostDAO.php");
 	require_once("..\DAO\FriendsDAO.php");
-	$login = LoginDAO::getIdLoginByNickname($_GET["nickname"]);
-
-	if(null == $login) {
-        echo json_code(0, array("token", null));
-        return;
-    }
+	require_once("..\DAO\PubliDAO.php");
+	require_once("..\DAO\NotificationDAO.php");
 	
     $tags=TagDAO::getTagsByIdUser($user->getIdUser());
-    foreach ($tags as $tag)
-    	TagDAO::deleteTagById($tag['idTag']);
-    $comments=PostDAO::getPostsByIdUser($user->getIdUser());
+    if(count($tags)) {
+        foreach ($tags as $tag)
+    	   TagDAO::deleteTagById($tag['idTag']);
+    }
+
+    $comments=CommentDAO::getCommentsByIdUser($user->getIdUser());
+
+    if(count($comments)) {
     foreach ($comments as $comment)
-    	PostDAO::deleteComment($comment['idComment']);
+    	CommentDAO::deleteComment($comment[0]);
+    }
+
     $posts=PostDAO::getPostsByIdUser($user->getIdUser());
-    foreach ($posts as $post)
-    	PostDAO::deletePost($post['idPost']);
+    if(count($posts)) {
+        foreach ($posts as $post)
+            PostDAO::deletePost($post[0]);
+    }
+
     $friends=FriendsDAO::getHasFriendsForUserByIdUser($user->getIdUser());
+    if(count($friends) ) {
     foreach ($friends as $friend)
-    	PostDAO::deleteHasFriendById($friend['idHasFriend']);
+    	FriendsDAO::deleteHasFriendById($friend['idHasFriend']);   
+    }
+
+    $notifications=NotificationDAO::getNotifsByIdUser($user->getIdUser());
+    if(count($notifications) ) {
+    foreach ($notifications as $notification)
+    	NotificationDAO::deleteNotification($notification);   
+    }
+
+    $publications = PubliDAO::getPublicationsByUser($user->getIdUser());
+    if(count($publications) ) {   
+    foreach ($publications as $publi) 
+    	PubliDAO::deletePublication($publi);   
+    }
 
 	//UserDAO::deleteUser($idLog);
 	//LoginDAO::deleteLogin($idLog);

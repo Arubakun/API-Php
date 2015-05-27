@@ -70,7 +70,7 @@
             if( count($asks) )
                 return $asks;
             
-            return "";
+            return null;
         }
         
         public static function getFriendsForUserByIdUser($id, $offset = 0, $limit = 30) {
@@ -95,10 +95,10 @@
             if( count($asks) )
                 return $asks;
             
-            return "";
+            return null;
         }
 
-        public static function deleteHasFriendWithId($idHasFriend){
+        public static function deleteHasFriendById($idHasFriend){
             $dao = new self();
             $params = array(":idHasFriend" => $idHasFriend);
             $result = $dao->pdo->prepare("DELETE FROM `api-php`.`hasFriend`

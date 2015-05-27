@@ -44,6 +44,67 @@
             return null;
         }
         
+        public static function getNotifsByIdUser($user) {
+            $dao = new self();
+            
+            $params = array(":user" => $user);
+            $result= $dao->pdo->prepare("SELECT * FROM `notification` WHERE `user` = :user;");
+            $result && $result->execute($params);
+            
+            $notifications[] = array();
+            if($result && $result->execute()) {
+                while($row = $result->fetch(PDO::FETCH_ASSOC)) { 
+                    $notifications[] = $row["idNotification"];
+                }
+            }
+            
+            if(count($notifications))
+                return $notifications;
+            
+            return null;
+        }
+        
+        public static function getNotifsByIdPublication($publication) {
+            $dao = new self();
+            
+            $params = array(":publication" => $publication);
+            $result= $dao->pdo->prepare("SELECT * FROM `notification` WHERE `publication` = :publication;");
+            $result && $result->execute($params);
+            
+            $notifications[] = array();
+            if($result && $result->execute()) {
+                while($row = $result->fetch(PDO::FETCH_ASSOC)) { 
+                    $notification[] = $row["idNotification"];
+                }
+            }
+            
+            if(count($notifications))
+                return $notifications;
+            
+            return null;
+        }
+        
+         public static function deleteNotification($idNotification){
+            $dao = new self();
+            
+            $params = array(":idNotification" => $idNotification);
+            $result = $dao->pdo->prepare("DELETE FROM `api-php`.`notification`
+                    WHERE `idNotification` = :idNotification;");
+            
+            $result->bindValue(":idNotification", (int)$idNotification, PDO::PARAM_INT);
+            $result->execute();
+        }
+        
+        public static function deleteNotificationsByPublication($idPub){
+            $dao = new self();
+            $params = array(":publication" => $idPub);
+            $result = $dao->pdo->prepare("DELETE FROM `api-php`.`notification`
+                    WHERE `publication` = :publication;");
+            
+            $result->execute($params);
+            
+        }
+        
         public static function createNotificationsWithIdList($ids, $type, $publication) {
             foreach($ids as $id) {
                 self::createNewNotification($id, $type, $publication);

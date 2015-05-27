@@ -103,7 +103,7 @@
             
         }
 
-        public static function deleteTagsById($idTag){
+        public static function deleteTagById($idTag){
             $dao = new self();
             $params = array(":idTag" => $idTag);
             $result = $dao->pdo->prepare("DELETE FROM `api-php`.`tag`

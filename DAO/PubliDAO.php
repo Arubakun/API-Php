@@ -2,6 +2,7 @@
     require_once("..\DTO\PubliDTO.php");
     require_once("BaseDAO.php");
     require_once("TagDAO.php");
+    require_once("NotificationDAO.php");
 
     class PubliDAO extends BaseDAO{            
         public static function createNewPubli($author) {
@@ -159,15 +160,40 @@
             
             return null;    
         }
+        
+        public static function getPublicationsByUser($idUser) {
+            $dao = new self();
+            
+            $request = "SELECT `idPublication` FROM `publication` WHERE `author` = :id;";
+
+            $result= $dao->pdo->prepare($request);
+            $result->bindValue(':id', (int)$idUser, PDO::PARAM_INT);
+            
+            $publications = array();
+            if($result && $result->execute()) {
+                while($row = $result->fetch(PDO::FETCH_ASSOC)) {
+                    $publications[] = $row["idPublication"]; 
+                }
+            }
+            
+            if(count($publications))
+                return $publications;
+            
+            return null;
+        }
 
          public static function deletePublication($idPub){
             $dao = new self();
+             
             TagDAO::deleteTagsByPublication($idPub);
+            NotificationDAO::deleteNotificationsByPublication($idPub);
+             
             $params = array(":idPublication" => $idPub);
             $result = $dao->pdo->prepare("DELETE FROM `api-php`.`publication`
                     WHERE `idPublication` = :idPublication;");
             
-            $result->execute($params);
+            $result->bindValue(":idPublication", (int)$idPub, PDO::PARAM_INT);
+            $result->execute();
             
         }
 

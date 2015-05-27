@@ -23,7 +23,10 @@
         return;
     }
 
-
+    if(PubliDAO::getIdAuthorByPost($post->getIdPost())!=$user->getId()){
+        echo json_code(3); 
+        return;
+    }
     
     PostDAO::deletePost($_POST["post"]);
     PubliDAO::deletePublication($post->getPublication());

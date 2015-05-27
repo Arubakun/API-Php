@@ -23,6 +23,11 @@
         return;
     }
 
+    if(PubliDAO::getIdAuthorForComment($comment->getIdComment())!=$user->getIdUser()){
+        echo json_code(4); 
+        return;
+    }
+
     $tags = array();
     if(isset($_POST["tags"])) {
         $tags = explode(",", $_POST["tags"]);

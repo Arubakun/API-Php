@@ -23,7 +23,10 @@
         return;
     }
 
-
+    if(PubliDAO::getIdAuthorForComment($comment->getIdComment())!=$user->getIdUser()){
+        echo json_code(3); 
+        return;
+    }
 
     CommentDAO::deleteComment($_POST["comment"]);
     PubliDAO::deletePublication($comment->getPublication());

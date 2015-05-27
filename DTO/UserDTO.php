@@ -6,8 +6,6 @@
         private $email;
         private $phone;
         private $homePlace;
-        private $friends;
-        private $hasLiked;
         private $login;
         
         public function __construct($id, $name, $firstname, $email, $phone, $homePlace = null, $login) {

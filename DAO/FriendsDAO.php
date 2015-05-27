@@ -83,7 +83,7 @@
             $result = $dao->pdo->prepare($request);
             $result->bindValue(':idUser', $id, PDO::PARAM_STR); 
             $result->bindValue(':offset', (int) $offset, PDO::PARAM_INT); 
-            $result->bindValue(':limit', (int) $limit, PDO::PARAM_INT); 
+            $result->bindValue(':limit', (int) $limit, PDO::PARAM_INT);
             
             $asks = array();
             if($result && $result->execute()) {                

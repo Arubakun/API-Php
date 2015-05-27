@@ -31,6 +31,7 @@
     if($_GET["response"] == "OK" || $_GET["response"] == "NO") {
         FriendsDAO::updateHasFriend($_GET["hasFriend"], $_GET["response"]);
         echo json_code(1);
+        return;
     }
     
     echo json_code(4);

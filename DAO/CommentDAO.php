@@ -47,6 +47,25 @@
             
             return null;
         }
+
+        public static function deleteComment($idComment){
+            $dao = new self();
+            $params = array(":idComment" => $idComment);
+            $result = $dao->pdo->prepare("DELETE FROM `api-php`.`comment`
+                    WHERE `idComment` = :idComment;");
+            
+            $result->execute($params);
+        }
+
+        public static function deleteCommentByPost($idPost){
+            $dao=new self();
+            $params = array(":post" => $idPost);
+            $result = $dao->pdo->prepare("DELETE FROM `api-php`.`comment`
+                    WHERE `post` = :post;");
+            
+            $result->execute($params);
+
+        }
         
         public function getPDO() {return $this->pdo;}
     }

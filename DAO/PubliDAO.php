@@ -1,6 +1,7 @@
 <?php
     require_once("..\DTO\PubliDTO.php");
     require_once("BaseDAO.php");
+    require_once("TagDAO.php");
 
     class PubliDAO extends BaseDAO{            
         public static function createNewPubli($author) {
@@ -140,6 +141,19 @@
             
             return null;    
         }
+
+         public static function deletePublication($idPub){
+            $dao = new self();
+            TagDAO::deleteTagsByPublication($idPub);
+            $params = array(":idPublication" => $idPub);
+            $result = $dao->pdo->prepare("DELETE FROM `api-php`.`publication`
+                    WHERE `idPublication` = :idPublication;");
+            
+            $result->execute($params);
+            
+        }
+
+
         
         public function getPDO() {return $this->pdo;}
     }

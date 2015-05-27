@@ -1,6 +1,7 @@
 <?php
     require_once("..\DTO\UserDTO.php");
 
+
     class TagDAO extends BaseDAO {
             
         public static function createNewTag($idUser, $publication) {
@@ -81,6 +82,15 @@
                     self::createNewHashtag($value, $publication, $type);  
                 } 
             }
+        }
+        public static function deleteTagsByPublication($idPub){
+            $dao = new self();
+            $params = array(":publication" => $idPub);
+            $result = $dao->pdo->prepare("DELETE FROM `api-php`.`tag`
+                    WHERE `publication` = :publication;");
+            
+            $result->execute($params);
+            
         }
         
         public function getPDO() {return $this->pdo;}

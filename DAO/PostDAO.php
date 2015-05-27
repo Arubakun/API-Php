@@ -1,6 +1,7 @@
 <?php
     require_once("..\DTO\PostDTO.php");
     require_once("BaseDAO.php");
+    require_once("CommentDAO.php");
 
     class PostDAO extends BaseDAO{
             
@@ -102,6 +103,17 @@
                 return $posts;
             
             return null;    
+        }
+
+        public static function deletePost($idPost){
+            $dao = new self();
+            CommentDAO::deleteCommentByPost($idPost);
+            $params = array(":idPost" => $idPost);
+            $result = $dao->pdo->prepare("DELETE FROM `api-php`.`post`
+                    WHERE `idPost` = :idPost;");
+            
+            $result->execute($params);
+            
         }
         
         public function getPDO() {return $this->pdo;}

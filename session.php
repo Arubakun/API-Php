@@ -3,9 +3,8 @@
     require_once("DAO\LoginDAO.php");
     
     function connect($idLogin) {
-        session_start();
         session_unset();
-        
+        session_start();
         
         if( LoginDAO::existLoginById($idLogin) == "" || ($id = UserDAO::getUserIdByLoginID($idLogin)) == "" )   {return false;}
         $_SESSION["token"] = $idLogin;

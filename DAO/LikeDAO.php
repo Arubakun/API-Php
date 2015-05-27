@@ -37,6 +37,58 @@
             }
         }
         
+        public static function getLikeByIdUser($idUser) {
+            $dao = new self();
+            
+            $result = $dao->pdo->prepare("SELECT idHasLiked FROM `hasLiked` WHERE `user` = :user;");
+            $result->bindValue(':user', (int) $idUser, PDO::PARAM_INT);          
+            $result->execute();
+            
+            $likes = array();
+            if($result && $result->execute()) {
+                $likes[] = $row["idHasLiked"];
+            }
+            
+            if(count($likes))
+                return $likes;
+            
+            return null;
+        }
+        
+        public static function getLikeByIdPublication($idPublication) {
+            $dao = new self();
+            
+            $result = $dao->pdo->prepare("SELECT idHasLiked FROM `hasLiked` WHERE `publication` = :publication;");
+            $result->bindValue(':publication', (int) $idPublication, PDO::PARAM_INT);          
+            $result->execute();
+            
+            $likes = array();
+            if($result && $result->execute()) {
+                $likes[] = $row["idHasLiked"];
+            }
+            
+            if(count($likes))
+                return $likes;
+            
+            return null;
+        }
+        
+        public static function deleteLikesByPublication($idPublication) {
+            $dao = new self();
+            
+            $result = $dao->pdo->prepare("DELETE FROM `hasLiked` WHERE `publication` = :publication;");
+            $result->bindValue(':publication', (int) $idPublication, PDO::PARAM_INT);          
+            $result->execute();
+        }
+        
+        public static function deleteLikesByIdUser($idUser) {
+            $dao = new self();
+            
+            $result = $dao->pdo->prepare("DELETE FROM `hasLiked` WHERE `user` = :user;");
+            $result->bindValue(':user', (int) $idUser, PDO::PARAM_INT);          
+            $result->execute();
+        }
+        
         public static function getLikeByPublicationAndIdUser($publication, $idUser) {
             $dao = new self();
             

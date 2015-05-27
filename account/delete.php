@@ -3,11 +3,6 @@
 	require_once("../json.php");
 	require_once("../session.php");
 	$out = array();
-	
-	if(!isset($_GET["nickname"])) {
-		echo json_code(-1, array("token", null)); 
-        return;
-	}
 
 	// User not connected
     if( ($user = isConnected()) == null ) { 
@@ -61,8 +56,9 @@
     	PubliDAO::deletePublication($publi);   
     }
 
-	//UserDAO::deleteUser($idLog);
-	//LoginDAO::deleteLogin($idLog);
+    LikeDAO::deleteLikesByIdUser($user->getIdUser());
+	UserDAO::deleteUser($_SESSION["token"]);
+	UserDAO::deleteLogin($_SESSION["token"]);
 	
 
 	echo json_code(1);

@@ -3,6 +3,7 @@
     require_once("BaseDAO.php");
     require_once("TagDAO.php");
     require_once("NotificationDAO.php");
+    require_once("LikeDAO.php");
 
     class PubliDAO extends BaseDAO{            
         public static function createNewPubli($author) {
@@ -187,6 +188,7 @@
              
             TagDAO::deleteTagsByPublication($idPub);
             NotificationDAO::deleteNotificationsByPublication($idPub);
+            LikeDAO::deleteLikesByPublication($idPub);
              
             $params = array(":idPublication" => $idPub);
             $result = $dao->pdo->prepare("DELETE FROM `api-php`.`publication`

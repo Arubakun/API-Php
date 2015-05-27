@@ -18,7 +18,7 @@
     require_once("..\DAO\UserDAO.php");
     require_once("..\DAO\LoginDAO.php");
 
-    if(LoginDAO::existLoginById($_POST["id"]) == "") {
+    if(LoginDAO::existLoginById($user->getIdUser()) == "") {
         echo json_code(2);
         return; 
     }   
@@ -26,10 +26,10 @@
     $modif = array();    
     $user = UserDAO::getUserByLoginID($_SESSION["token"]);
     
-    if(isset($_POST["name"]) && $_POST["name"] != $user->getName())                 { $modif["name"] = $_POST["name"]; }
-    if(isset($_POST["firstname"]) && $_POST["firstname"] != $user->getFirstname())  { $modif["firstname"] = $_POST["firstname"]; }
-    if(isset($_POST["email"]) && $_POST["email"] != $user->getEmail())              { $modif["email"] = $_POST["email"]; }
-    if(isset($_POST["phone"]) && $_POST["phone"] != $user->getPhone())              { $modif["phone"] = $_POST["phone"]; }
+    if(isset($_POST["name"]) && $_POST["name"] != "" && $_POST["name"] != $user->getName())                 { $modif["name"] = $_POST["name"]; }
+    if(isset($_POST["firstname"]) && $_POST["firstname"] != "" && $_POST["firstname"] != $user->getFirstname())  { $modif["firstname"] = $_POST["firstname"]; }
+    if(isset($_POST["email"]) && $_POST["email"] != "" && $_POST["email"] != $user->getEmail())              { $modif["email"] = $_POST["email"]; }
+    if(isset($_POST["phone"]) && $_POST["phone"] != "" && $_POST["phone"] != $user->getPhone())              { $modif["phone"] = $_POST["phone"]; }
 
     if(!count($modif)) {
         echo json_code(3);

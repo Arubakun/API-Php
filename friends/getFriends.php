@@ -17,7 +17,7 @@
     
     require_once("..\DAO\FriendsDAO.php");
     // User doesn't have any friend
-    if( ($friends = FriendsDAO::getFriendsForUserByIdUser($_SESSION["token"], $_GET["offset"], $_GET["limit"])) == "") {
+    if( ($friends = FriendsDAO::getFriendsForUserByIdUser($user->getIdUser(), $_GET["offset"], $_GET["limit"])) == "") {
         echo json_code(2); 
         return;
     }

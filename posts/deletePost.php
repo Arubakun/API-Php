@@ -18,12 +18,12 @@
     require_once("..\DAO\PostDAO.php");
     require_once("..\DAO\PubliDAO.php");
     // No Post with the specified id
-    if( ($post = PostDAO::getPosttByIdPost($_POST["post"])) == null ) {
+    if( ($post = PostDAO::getPostByIdPost($_POST["post"])) == null ) {
         echo json_code(2); 
         return;
     }
 
-    if(PubliDAO::getIdAuthorByPost($post->getIdPost())!=$user->getId()){
+    if(PubliDAO::getIdAuthorForPost($post->getIdPost())!=$user->getIdUser()){
         echo json_code(3); 
         return;
     }

@@ -17,7 +17,7 @@
         public function setContent($content) { $this->content = $content; }
         public function setPublication($publication) { $this->publication = $publication; }
         
-        public function getIdPost() { return $this->idUser; }
+        public function getIdPost() { return $this->idPost; }
         public function getTitle() { return $this->title; }
         public function getContent() { return $this->content; }
         public function getPublication() { return $this->publication; }

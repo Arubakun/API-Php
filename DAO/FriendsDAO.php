@@ -97,6 +97,14 @@
             
             return "";
         }
+
+        public static function deleteHasFriendWithId($idHasFriend){
+            $dao = new self();
+            $params = array(":idHasFriend" => $idHasFriend);
+            $result = $dao->pdo->prepare("DELETE FROM `api-php`.`hasFriend`
+                    WHERE `idHasFriend` = :idHasFriend;");
+            $result->execute($params);
+        }
                 
         public function getPDO() {return $this->pdo;}
     }

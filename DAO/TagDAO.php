@@ -31,6 +31,16 @@
                 return $result->fetch(PDO::FETCH_ASSOC);
             }
         }
+
+        public static function getTagsByIdUser($idUser, $type = "USER") {
+            $dao = new self();
+            $params = array(":idUser" => $idUser);
+            $result = $dao->pdo->prepare("SELECT * FROM tag WHERE user = :idUser AND type = 'USER';");
+            
+            if($result && $result->execute($params)) {
+                return $result->fetchAll();
+            }
+        }
         
         public static function getHashtagByValueAndPublication($value, $publication, $type = "HASHTAG") {
             $dao = new self();
@@ -88,6 +98,16 @@
             $params = array(":publication" => $idPub);
             $result = $dao->pdo->prepare("DELETE FROM `api-php`.`tag`
                     WHERE `publication` = :publication;");
+            
+            $result->execute($params);
+            
+        }
+
+        public static function deleteTagsById($idTag){
+            $dao = new self();
+            $params = array(":idTag" => $idTag);
+            $result = $dao->pdo->prepare("DELETE FROM `api-php`.`tag`
+                    WHERE `idTag` = :idTag;");
             
             $result->execute($params);
             

@@ -48,6 +48,25 @@
             return null;
         }
 
+        public static function getCommentsByIdUser($idUser) {
+            $dao = new self();
+            
+            $params = array(":idUser" => $idUser);
+            $result= $dao->pdo->prepare("SELECT `comment`.*, `publication`.`created` FROM `comment` INNER JOIN `publication` ON `publication`.`idPublication` = `comment`.`publication` WHERE `publication`.`author` = :idUser ORDER BY `publication`.`created`;");
+            
+            $comments = array();
+            if($result && $result->execute($params)) {                
+                while($row = $result->fetch(PDO::FETCH_ASSOC)) {
+                    $comments[] = array($row["idComment"], $row["content"], $row["publication"], $row["created"]);
+                }
+            }
+            
+            if(count($comments))
+                return $comments;
+            
+            return null;    
+        }
+
         public static function deleteComment($idComment){
             $dao = new self();
             $params = array(":idComment" => $idComment);
